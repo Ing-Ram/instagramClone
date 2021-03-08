@@ -1,5 +1,6 @@
 package com.codepath.ingram.instagramclone.Fragment;
 
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -35,6 +36,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -89,7 +91,27 @@ public class ComposeFragment extends Fragment {
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchCamera();
+                //launchCamera();
+                // create Intent to take a picture and return control to the calling application
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Create a File reference for future access
+                photoFile = getPhotoFileUri(photoFileName);
+
+                // wrap File object into a content provider
+                // required for API >= 24
+                // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+
+                Uri fileProvider = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), "com.codepath.fileprovider", photoFile);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+                // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+                // So as long as the result is not null, it's safe to use the intent.
+                if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+                    // Start the image capture intent to take photo
+                    startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+                }else{
+                    Toast.makeText(getContext(),"Error on Photo", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -120,25 +142,28 @@ public class ComposeFragment extends Fragment {
             }
         });
     }
-    private void launchCamera() {
-        // create Intent to take a picture and return control to the calling application
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Create a File reference for future access
-        photoFile = getPhotoFileUri(photoFileName);
-
-        // wrap File object into a content provider
-        // required for API >= 24
-        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
-        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-        // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            // Start the image capture intent to take photo
-            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        }
-    }
+//    private void launchCamera() {
+//        // create Intent to take a picture and return control to the calling application
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Create a File reference for future access
+//        photoFile = getPhotoFileUri(photoFileName);
+//
+//        // wrap File object into a content provider
+//        // required for API >= 24
+//        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
+//
+//        Uri fileProvider = FileProvider.getUriForFile(Objects.requireNonNull(getContext()), "com.codepath.fileprovider", photoFile);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+//
+//        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+//        // So as long as the result is not null, it's safe to use the intent.
+//        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+//            // Start the image capture intent to take photo
+//            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+//        }else{
+//            Toast.makeText(getContext(),"Error on Photo", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
