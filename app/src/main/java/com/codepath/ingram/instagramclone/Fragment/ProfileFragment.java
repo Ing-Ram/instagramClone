@@ -35,5 +35,6 @@ public class ProfileFragment extends PostsFragment {
 
             }
         });
+        swipeContainer.setRefreshing(false);
     }
 }
