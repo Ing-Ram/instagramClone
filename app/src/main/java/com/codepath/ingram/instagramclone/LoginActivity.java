@@ -13,12 +13,14 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e(TAG, "Issue with login",e);
                     return;
                 }
-
                 goMainActivity();
                 Toast.makeText(LoginActivity.this,"Success", Toast.LENGTH_SHORT).show();
             }
@@ -65,5 +66,22 @@ public class LoginActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
+    }
+    public void signup(View view) {
+        ParseUser user = new ParseUser();
+        user.setPassword(etPassword.getText().toString());
+        user.setUsername(etUsername.getText().toString());
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null){
+                    Toast.makeText(LoginActivity.this, "Sign up unsuccessful!", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "sign up failed", e);
+                }else{
+                    Toast.makeText(LoginActivity.this, "Sign up complete", Toast.LENGTH_LONG).show();
+                    loginUser(etUsername.toString(),etPassword.toString());
+                }
+            }
+        });
     }
 }
