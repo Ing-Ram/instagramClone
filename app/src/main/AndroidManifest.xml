@@ -3,7 +3,7 @@
     package="com.codepath.ingram.instagramclone">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
 <!--    <uses-feature android:name="android.hardware.camera" />-->
 <!--    <uses-feature android:name="android.hardware.camera" android:required="false" />-->
     <queries>
@@ -25,7 +25,7 @@
         <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.codepath.Fileprovider"
+            android:authorities="com.codepath.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
