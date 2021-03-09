@@ -13,11 +13,13 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Description..."/>
+
     <Button
         android:id="@+id/btnCaptureImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Take a Picture" />
+
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
