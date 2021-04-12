@@ -67,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
     public void signup(View view) {
         ParseUser user = new ParseUser();
         user.setPassword(etPassword.getText().toString());
